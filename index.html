@@ -10,9 +10,11 @@
         :root {
             --primary: #ff477e;
             --secondary: #ff7096;
+            --success: #2ed573;
+            --error: #ff4757;
             --background: #fff0f3;
             --text: #4a0e17;
-            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.6);
         }
 
@@ -29,82 +31,89 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            box-sizing: border-box;
         }
 
         /* Ambient glowing background shapes */
         .bg-glow {
             position: absolute;
-            background: linear-gradient(45deg, #ff758c 0%, #ff7eb3 100%);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.25;
+            filter: blur(60px);
+            opacity: 0.3;
             z-index: 1;
             animation: floatBG 8s ease-in-out infinite;
         }
-        .glow-1 { width: 300px; height: 300px; top: -50px; left: -50px; }
-        .glow-2 { width: 250px; height: 250px; bottom: -50px; right: -50px; animation-delay: -4s; }
+        .glow-1 { width: 350px; height: 350px; top: -50px; left: -50px; background: linear-gradient(45deg, #ff758c, #ff7eb3); }
+        .glow-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: linear-gradient(45deg, #ff477e, #ff7096); animation-delay: -4s; }
+
+        /* Wrapper to keep everything perfectly centered vertically */
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 550px;
+            z-index: 10;
+            margin: auto;
+        }
 
         .header {
             text-align: center;
             margin-bottom: 25px;
-            z-index: 10;
-            max-width: 600px;
+            width: 100%;
         }
 
         h1 {
             font-family: 'Fredoka One', cursive;
             font-size: 2.6rem;
             color: var(--primary);
-            margin: 0 0 10px 0;
-            text-shadow: 3px 3px 0px white, 5px 5px 15px rgba(255, 71, 126, 0.3);
+            margin: 0 0 12px 0;
+            text-shadow: 3px 3px 0px white, 5px 5px 15px rgba(255, 71, 126, 0.35);
             letter-spacing: 1px;
         }
 
         .header p {
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
             font-weight: bold;
             color: #6b3b43;
-            background: rgba(255, 255, 255, 0.4);
-            padding: 10px 15px;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 12px 18px;
+            border-radius: 20px;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid var(--glass-border);
+            margin: 0;
+            box-shadow: 0 4px 15px rgba(255, 112, 150, 0.05);
         }
 
-        /* Upgraded Game Container to Frosted Glass */
+        /* Centered Game Container Card */
         .game-container {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 2px solid var(--glass-border);
             padding: 35px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(255, 107, 129, 0.15);
-            width: 90%;
-            max-width: 500px;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(255, 107, 129, 0.2);
+            width: 100%;
             text-align: center;
-            z-index: 10;
             box-sizing: border-box;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .game-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(255, 107, 129, 0.25);
         }
 
         h2 {
             font-family: 'Fredoka One', cursive;
             color: var(--primary);
             margin-top: 0;
+            font-size: 1.8rem;
         }
 
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             border: none;
-            padding: 16px 32px;
+            padding: 16px 36px;
             font-size: 1.1rem;
             font-family: 'Fredoka One', cursive;
             border-radius: 50px;
@@ -112,7 +121,7 @@
             box-shadow: 0 10px 20px rgba(255, 71, 126, 0.4);
             transition: all 0.3s ease;
             letter-spacing: 1px;
-            margin: 15px 0 5px 0;
+            margin-top: 15px;
         }
 
         .btn:hover {
@@ -137,18 +146,37 @@
             font-size: 1rem;
             font-weight: 700;
             font-family: 'Comfortaa', cursive;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
         }
 
         .option-btn:hover {
             border-color: var(--secondary);
             background: #fff9fa;
             transform: scale(1.02);
-            box-shadow: 0 6px 15px rgba(255, 107, 129, 0.1);
+            box-shadow: 0 6px 15px rgba(255, 107, 129, 0.15);
         }
 
-        /* Top Progress Bar Layout */
+        /* Smooth Feedback Animations */
+        .option-btn.correct-glow {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724 !important;
+            box-shadow: 0 0 20px rgba(46, 213, 115, 0.6) !important;
+            transform: scale(1.04);
+            animation: popCheck 0.3s ease;
+        }
+
+        .option-btn.wrong-glow {
+            background-color: #f8d7da !important;
+            border-color: var(--error) !important;
+            color: #721c24 !important;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4) !important;
+        }
+
+        /* Progress Bar Setup */
         .progress-container {
             width: 100%;
             height: 10px;
@@ -180,7 +208,51 @@
             font-size: 1.3rem;
         }
 
-        /* Hearts falling logic */
+        /* ==================== CELEBRATION WIN SCREEN DESIGN ==================== */
+        .victory-container {
+            background: radial-gradient(circle, #ffffff 60%, #fff0f3 100%);
+            border: 4px solid #ffd32a; /* Gold Border */
+            padding: 40px 30px;
+            border-radius: 40px;
+            box-shadow: 0 30px 70px rgba(255, 71, 126, 0.4), inset 0 0 20px rgba(255, 211, 42, 0.2);
+            animation: ultimateEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .winner-banner {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.2rem;
+            color: #ffd32a;
+            text-shadow: 2px 2px 0px #ff477e, 4px 4px 0px #4a0e17;
+            margin: 10px 0;
+            animation: bounce textBounce 1s infinite alternate;
+        }
+
+        .prize-box {
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
+            padding: 25px;
+            border-radius: 24px;
+            border: 3px dashed var(--primary);
+            margin: 25px 0;
+            box-shadow: 0 10px 25px rgba(255, 71, 126, 0.1);
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .prize-tag {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd32a;
+            color: #4a0e17;
+            font-family: 'Fredoka One', cursive;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Falling Assets Setup */
         .heart {
             position: absolute;
             pointer-events: none;
@@ -189,23 +261,29 @@
         }
 
         @keyframes fall {
-            0% {
-                transform: translateY(-5vh) scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(105vh) scale(1) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-5vh) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) scale(1) rotate(720deg); opacity: 0; }
         }
 
+        /* Keyframes Animations */
+        @keyframes popCheck {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1.04); }
+        }
+        @keyframes ultimateEntrance {
+            0% { transform: scale(0.7) translateY(100px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
         @keyframes floatBG {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
+            50% { transform: translateY(-30px) scale(1.05); }
         }
-
         .hidden { display: none !important; }
-        
         .shake { animation: shake 0.4s ease; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -219,42 +297,53 @@
     <div class="bg-glow glow-1"></div>
     <div class="bg-glow glow-2"></div>
 
-    <div class="header">
-        <h1>✨ The Trishna Arcade ✨</h1>
-        <p>Only the ULTIMATE BEST EVER SEXY HOT CUTE PRETTY BEAUTFUL THICC SMART ELEGANT GORGEOUS GRACEFUL LOVING CARING PATIENT (words are less to describe u ji) GIRLFRIEND can pass this test.</p>
-    </div>
-
-    <!-- Start Screen -->
-    <div id="start-screen" class="game-container">
-        <h2>Are you ready, Babu?</h2>
-        <p style="color: #6b3b43;">Prove how well you know me! Answer the questions correctly to unlock your final rewarddd.</p>
-        <button class="btn" onclick="startGame()">Start Game 🎮</button>
-    </div>
-
-    <!-- Quiz Screen -->
-    <div id="quiz-screen" class="game-container hidden">
-        <div class="progress-container">
-            <div id="progress" class="progress-fill"></div>
-        </div>
-        <div class="score-display">Question <span id="q-num">1</span> / 4</div>
-        <h3 id="question-text">Question text goes here?</h3>
-        <div class="options-grid" id="options-container">
-            <!-- Dynamic Buttons will land here -->
-        </div>
-    </div>
-
-    <!-- Win Screen -->
-    <div id="win-screen" class="game-container hidden">
-        <span style="font-size: 4rem;">🏆</span>
-        <h2>🎉 You Did It, Trishna! 🎉</h2>
-        <p style="color: #6b3b43;">You scored 100% because you're literally perfect. <br><b>Hum toh bas mard h jiiii.</b></p>
+    <!-- Main Wrapper forces strict layout alignment -->
+    <div class="main-wrapper">
         
-        <div style="background: white; padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 71, 126, 0.15); margin: 20px 0;">
-            <span style="color: var(--primary); font-weight: bold; font-size: 1.1rem;">🎟️ YOUR UNLOCKED PRIZE:</span>
-            <p style="font-size: 1.2rem; font-weight: bold; margin: 10px 0 0 0;">A date night wherever you want, on me.</p>
+        <div class="header" id="main-header">
+            <h1>✨ The Trishna Arcade ✨</h1>
+            <p>Only the ULTIMATE BEST EVER SEXY HOT CUTE PRETTY BEAUTFUL THICC SMART ELEGANT GORGEOUS GRACEFUL LOVING CARING PATIENT (words are less to describe u ji) GIRLFRIEND can pass this test.</p>
         </div>
-        
-        <button class="btn" onclick="restartGame()">Play Again 🔄</button>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="game-container">
+            <h2>Are you ready, Babu?</h2>
+            <p style="color: #6b3b43; line-height: 1.5; margin-bottom: 20px;">Prove how well you know me! Answer the questions correctly to unlock your final rewarddd.</p>
+            <button class="btn" onclick="startGame()">Start Game 🎮</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="game-container hidden">
+            <div class="progress-container">
+                <div id="progress" class="progress-fill"></div>
+            </div>
+            <div class="score-display">Question <span id="q-num">1</span> / 4</div>
+            <h3 id="question-text">Question text goes here?</h3>
+            <div class="options-grid" id="options-container">
+                <!-- Dynamic Buttons -->
+            </div>
+        </div>
+
+        <!-- NEW CASINO CELEBRATION WIN SCREEN -->
+        <div id="win-screen" class="game-container victory-container hidden">
+            <span style="font-size: 5rem; display: inline-block; animation: float 2.5s ease-in-out infinite;">👑</span>
+            <div class="winner-banner">👑 JACKPOT WINNER 👑</div>
+            <p style="color: #6b3b43; font-weight: 700; font-size: 1.1rem; margin: 10px 0;">You scored 100% because you're literally perfect!</p>
+            <p style="color: var(--primary); font-family: 'Fredoka One', cursive; margin: 0; font-size: 1.2rem;">Hum toh bas mard h jiiii. 🤷‍♂️❤️</p>
+            
+            <div class="prize-box">
+                <div class="prize-tag">UNLOCKED CLAIM TICKET</div>
+                <span style="font-size: 2.2rem;">🎟️</span>
+                <p style="font-size: 1.25rem; font-weight: bold; margin: 10px 0 0 0; color: #4a0e17; line-height: 1.4;">
+                    A premium date night plan (wherever you pick) + endless hugs on demand!
+                </p>
+            </div>
+            
+            <button class="btn" onclick="restartGame()" style="background: linear-gradient(135deg, #ffd32a 0%, #ff9f43 100%); color: #4a0e17; box-shadow: 0 10px 20px rgba(255, 159, 67, 0.4);">
+                Replay Simulation 🔄
+            </button>
+        </div>
+
     </div>
 
     <script>
@@ -282,13 +371,14 @@
         ];
 
         let currentQuestionIndex = 0;
-        let heartInterval;
+        let ambientHeartInterval;
+        let victoryShowerInterval;
 
         function startGame() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
             loadQuestion();
-            heartInterval = setInterval(createHeart, 400);
+            ambientHeartInterval = setInterval(() => createHeart(false), 450);
         }
 
         function loadQuestion() {
@@ -296,7 +386,6 @@
             document.getElementById('q-num').innerText = currentQuestionIndex + 1;
             document.getElementById('question-text').innerText = currentQuestion.question;
             
-            // Handle active progress bar styling
             const progressPercent = (currentQuestionIndex / quizData.length) * 100;
             document.getElementById('progress').style.width = progressPercent + '%';
 
@@ -312,61 +401,89 @@
             });
         }
 
-        function checkAnswer(selectedOption, element) {
+        function checkAnswer(selectedOption, clickedButton) {
             const correctAnswer = quizData[currentQuestionIndex].answer;
             const quizContainer = document.getElementById('quiz-screen');
             
+            // Freeze buttons momentarily during response feedback
+            const allButtons = document.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+
             if (selectedOption === correctAnswer) {
-                // Burst bonus particles for getting it right
-                for(let i=0; i<6; i++) createHeart();
+                clickedButton.classList.add('correct-glow');
+                
+                // Burst small heart geyser on correct selection
+                for(let i=0; i<10; i++) createHeart(true);
                 
                 currentQuestionIndex++;
-                if (currentQuestionIndex < quizData.length) {
-                    loadQuestion();
-                } else {
-                    showWinScreen();
-                }
+                
+                setTimeout(() => {
+                    if (currentQuestionIndex < quizData.length) {
+                        loadQuestion();
+                    } else {
+                        showWinScreen();
+                    }
+                }, 800); // 800ms delay to let her admire the green glow success effect
+                
             } else {
-                // Shake penalty effect if she hits a wrong response
+                clickedButton.classList.add('wrong-glow');
                 quizContainer.classList.add('shake');
-                element.style.borderColor = '#ff4757';
-                element.style.background = '#fff0f2';
-                setTimeout(() => quizContainer.classList.remove('shake'), 400);
+                
+                setTimeout(() => {
+                    quizContainer.classList.remove('shake');
+                    // Unfreeze buttons so she can guess again
+                    allButtons.forEach(btn => {
+                        btn.style.pointerEvents = 'auto';
+                        btn.classList.remove('wrong-glow');
+                    });
+                }, 400);
             }
         }
 
         function showWinScreen() {
+            clearInterval(ambientHeartInterval);
             document.getElementById('progress').style.width = '100%';
             document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('main-header').classList.add('hidden'); // Hide top text to draw complete focus to victory
             document.getElementById('win-screen').classList.remove('hidden');
             
-            // Massive celebration shower
-            clearInterval(heartInterval);
-            for(let i=0; i<60; i++) {
-                setTimeout(createHeart, i * 60);
-            }
+            // Unleash non-stop heavy particle downpour
+            victoryShowerInterval = setInterval(() => {
+                createHeart(true);
+                createHeart(false);
+            }, 70);
         }
 
         function restartGame() {
+            clearInterval(victoryShowerInterval);
             currentQuestionIndex = 0;
             document.getElementById('win-screen').classList.add('hidden');
+            document.getElementById('main-header').classList.remove('hidden');
             document.getElementById('start-screen').classList.remove('hidden');
         }
 
-        function createHeart() {
+        function createHeart(isBurst) {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerText = ['💖', '❤️', '💝', '✨', '💋', '🌸'][Math.floor(Math.random() * 6)];
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.top = '-5vh';
-            heart.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
-            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
-            heart.style.opacity = Math.random() * 0.7 + 0.3;
+            heart.innerText = ['💖', '❤️', '💝', '✨', '💋', '🌸', '👑', '🎉'][Math.floor(Math.random() * 8)];
+            
+            if (isBurst) {
+                // Erupt parameters directly out from the card center field
+                heart.style.left = (Math.random() * 40 + 30) + 'vw';
+                heart.style.top = '45vh';
+                heart.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+            } else {
+                // Standard rainfall drop variables
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '-5vh';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            }
+            
+            heart.style.fontSize = (Math.random() * 1.6 + 1.2) + 'rem';
+            heart.style.opacity = Math.random() * 0.8 + 0.2;
             document.body.appendChild(heart);
 
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            setTimeout(() => heart.remove(), 4000);
         }
     </script>
 </body>
