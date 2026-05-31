@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Trishna Arcade 💖</title>
+    <style>
+        :root {
+            --primary: #ff477e;
+            --secondary: #ff7096;
+            --background: #fff0f3;
+            --text: #4a0e17;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 5px;
+        }
+
+        .game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 71, 126, 0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background-color: #fff;
+            border: 2px solid var(--secondary);
+            color: var(--text);
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            background-color: var(--background);
+            border-color: var(--primary);
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: absolute;
+            color: var(--primary);
+            font-size: 1.5rem;
+            animation: fall linear forwards;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hidden { display: none; }
+        
+        .score-display {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>✨ The Trishna Arcade ✨</h1>
+        <p>Only the ultimate girlfriend can pass this test.</p>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="game-container">
+        <h2>Are you ready, Trishna?</h2>
+        <p>Prove how well you know us! Answer the questions correctly to unlock your final reward.</p>
+        <button class="btn" onclick="startGame()">Start Game 🎮</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="game-container hidden">
+        <div class="score-display">Question <span id="q-num">1</span>/3</div>
+        <h3 id="question-text">Question text goes here?</h3>
+        <div class="options-grid" id="options-container">
+            <!-- Dynamic Buttons will land here -->
+        </div>
+    </div>
+
+    <!-- Win Screen -->
+    <div id="win-screen" class="game-container hidden">
+        <h2>🎉 You Did It, Trishna! 🎉</h2>
+        <p>You scored 100% because you're literally perfect.</p>
+        <p style="font-size: 1.2rem; font-weight: bold; margin: 20px 0;"> Your prize: A date night wherever you want, on me. 🎟️</p>
+        <button class="btn" onclick="restartGame()">Play Again 🔄</button>
+    </div>
+
+    <script>
+        // --- CUSTOMIZE YOUR QUESTIONS HERE ---
+        const quizData = [
+            {
+                question: "Where was our very first date?",
+                options: ["The cozy cafe down the street", "The beach at sunset", "That one fast-food joint", "We just hung out in the car"],
+                answer: "The cozy cafe down the street" // Change this to the exact correct string
+            },
+            {
+                question: "What is my absolute favorite thing about you?",
+                options: ["Your laugh", "Your taste in music", "How smart you are", "All of the above, obviously"],
+                answer: "All of the above, obviously"
+            },
+            {
+                question: "What is our go-to comfort food to order?",
+                options: ["Pizza", "Burgers & Fries", "Sushi", "Biryani"],
+                answer: "Pizza"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion();
+            // Start dropping hearts
+            setInterval(createHeart, 300);
+        }
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            document.getElementById('q-num').innerText = currentQuestionIndex + 1;
+            document.getElementById('question-text').innerText = currentQuestion.question;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option-btn');
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            
+            if (selectedOption === correctAnswer) {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizData.length) {
+                    loadQuestion();
+                } else {
+                    showWinScreen();
+                }
+            } else {
+                alert("❌ Wrong answer! Try again, I know you know me better than that! 😉");
+            }
+        }
+
+        function showWinScreen() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('win-screen').classList.remove('hidden');
+            // Trigger massive heart explosion
+            for(let i=0; i<50; i++) {
+                setTimeout(createHeart, i * 50);
+            }
+        }
+
+        function restartGame() {
+            currentQuestionIndex = 0;
+            document.getElementById('win-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = ['💖', '❤️', '💝', '✨'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-5vh';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
